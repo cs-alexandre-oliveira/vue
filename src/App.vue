@@ -1,7 +1,11 @@
 <template>
   <div>
     <h1>{{ titulo }}</h1>
-    <img v-bind:src="foto.url" :alt="foto.titulo">
+    
+    <ul v-for="foto of images">
+      <li><img v-bind:src="foto.url" :alt="foto.titulo"></li>
+    </ul>
+    
     <form>
       <select>
         <option value="QA">QA</option>
@@ -31,16 +35,25 @@ export default {
 
     return {
       titulo: 'Onboard Cadastro',
-      foto: {
+      images: [
+      {
         url: 'https://thumb.lovemondays.com.br/image/096106d41e8d443e964f45fae4a30cb7/logos/93e6a6/concrete-solutions.gif',
         titulo: 'Concrete Soluction'
+      },
+      {
+        url: 'https://codesui.com/app/uploads/2016/12/vuejs-logo.png',
+        titulo: 'Vue da Massa'
       }
-
+      ]
     }
   }
 }
 </script>
 
 <style>
+img {
+  width:100px;
+  height:50px;
+}
 
 </style>
