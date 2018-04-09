@@ -2,14 +2,14 @@
   <div class="corpo">
     <h1 class="centralizado">{{ titulo }}</h1>
     
-    <ul class="lista-fotos" v-for="foto of images">
+    <input type="search" class="filtro" v-on:input="filtro = $event.target.value" placeholder="Encontre sua imagem por título!">
+    {{ filtro }}
+    <ul class="lista-fotos" v-for="foto of imagensComfiltro">
       <li class="lista-fotos-item">
-        <div class="painel">
-          <h2 class="painel-titulo">{{ foto.titulo }}</h2>
-          <div class="painel-conteudo">
-            <img class="imagem-responsiva" v-bind:src="foto.url" :alt="foto.titulo">
-          </div>
-        </div>
+        <meu-painel :titulo="foto.titulo">
+          <imagem-responsiva :url="foto.url" :titulo="foto.titulo">
+          </imagem-responsiva>
+        </meu-painel>  
       </li>
     </ul>
     
@@ -37,13 +37,32 @@
 </template>
 
 <script>
+import Painel from './components/shared/painel/Painel.vue';
+import ImagemResponsiva from './components/shared/imagem-responsiva/ImagemResponsiva.vue';
+
 export default { 
+  
+  components: {
+    'meu-painel' : Painel,
+    'imagem-responsiva' : ImagemResponsiva
+  },
   data() {
 
     return {
       titulo: 'Onboard Cadastro',
-      images: []
+      images: [],
+      filtro: ''
     }
+  },
+  computed: {
+    imagensComfiltro() {
+      if(this.filtro) {
+        let exp = new RegExp(this.filtro.trim(), 'i');
+        return this.images.filter(foto => exp.test(foto.titulo));
+      } else {
+        return this.images;
+      }
+    } 
   },
   created() {
     let promise = this.$http.get('http://localhost:3000/v1/fotos');
@@ -69,27 +88,8 @@ export default {
   .lista-fotos, .lista-fotos-item {
     display: inline-block;
   }
-  .imagem-responsiva {
+  .filtro {
+    display: block;
     width: 100%;
-  }
-  .painel {
-    padding: 0 auto;
-    border: solid 2px grey;
-    display: inline-block;
-    margin: 5px;
-    box-shadow: 5px 5px 10px grey;
-    width: 200px;
-    height: 100%;
-    vertical-align: top;
-    text-align: center;
-  }
-
-  .painel .painel-titulo {
-    text-align: center;
-    border: solid 2px;
-    background: lightgreen;
-    margin: 0 0 15px 0;
-    padding: 10px;
-    text-transform: uppercase;
   }
 </style>
