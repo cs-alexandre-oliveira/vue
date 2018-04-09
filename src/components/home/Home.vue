@@ -7,7 +7,8 @@
     <ul class="lista-fotos" v-for="foto of imagensComfiltro">
       <li class="lista-fotos-item">
         <meu-painel :titulo="foto.titulo">
-          <imagem-responsiva :url="foto.url" :titulo="foto.titulo">
+          <imagem-responsiva :url="foto.url" :titulo="foto.titulo"/>
+          <meu-botao tipo="button" rotulo="Remover" @botaoAtivado="remove(foto)" :confirmacao="true" estilo="padrao"></meu-botao>
           </imagem-responsiva>
         </meu-painel>  
       </li>
@@ -39,12 +40,14 @@
 <script>
 import Painel from '../shared/painel/Painel.vue';
 import ImagemResponsiva from '../shared/imagem-responsiva/ImagemResponsiva.vue';
+import Botao from '../shared/botao/Botao.vue';
 
 export default { 
   
   components: {
     'meu-painel' : Painel,
-    'imagem-responsiva' : ImagemResponsiva
+    'imagem-responsiva' : ImagemResponsiva,
+    'meu-botao' : Botao
   },
   data() {
 
@@ -63,6 +66,11 @@ export default {
         return this.images;
       }
     } 
+  },
+  methods: {
+    remove(foto) {
+        alert('Remover a foto! ' + foto.titulo);
+    }
   },
   created() {
     let promise = this.$http.get('http://localhost:3000/v1/fotos');
